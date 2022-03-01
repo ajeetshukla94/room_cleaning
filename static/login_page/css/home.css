@@ -1,0 +1,32 @@
+.home_img{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top:20px;
+	padding-bottom:20px;
+	width:40%;	
+}
+
+
+.frame{
+	height:350px;
+	width:inherit;
+	
+}
+
+
+.info{
+	padding-top:10px;
+	padding-left:10px;
+	float:right;
+}
+
+.frame_container{
+	width:100%;
+}
+
+.app_img{
+	width:100%;
+	
+}
+

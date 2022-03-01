@@ -1,0 +1,8 @@
+Flask
+gunicorn
+numpy
+openpyxl
+pandas
+xlrd
+XlsxWriter
+

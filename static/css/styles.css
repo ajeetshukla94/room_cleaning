@@ -1,0 +1,187 @@
+#header{
+	width:100%;
+	background-color:#000000;
+	padding:2px;
+	color:#ffffff;
+	display: flex;  
+	flex-wrap: wrap;
+}
+
+#header-img{
+	width:50px;
+	height:50px;
+	float:left;
+}
+
+#header-text{
+	padding-left:5px;
+}
+
+#frame_container{
+	margin-top:5%;
+	margin-left:10%;
+	margin-right:10%;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	
+}
+
+#container_header{
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	background-color:#000000;
+	color:#ffffff;
+	display: flex;  
+	flex-wrap: wrap;
+}
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+#data_frame{
+	width:100%;
+	display:block;
+}
+
+.frame{
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+}
+
+table{
+	width:100%;
+}
+
+.sections{
+	padding-top:10px;
+}
+
+th{
+	background-color:#968784;
+}
+
+.add_row_button{
+	width:100%;
+	text-align:right;
+}
+
+input{
+	width:100%;
+}
+
+#action_row{
+	width:100%;
+	text-align:center;
+	display:block;
+}
+
+button{
+	margin:5px;
+}
+
+.frame_header_cont{
+	width:100%;
+	background-color:#97CBE7;
+	display:flex;
+	flex-wrap: wrap;
+}
+
+.frame_header{
+	float:left;
+	padding:10px;
+}
+
+.del_frame{
+	float:right;
+	width:20px;
+	height:20px;
+	margin:5px;
+}
+
+.del_row{
+	text-align:center;
+}
+
+.del_row_img{
+	width:20px;
+	height:20px;
+}
+
+.code{
+	width:13%;
+}
+
+#footer{
+	width:100%;
+	background-color:#000000;
+	padding:2px;
+	color:#ffffff;
+	display: flex;  
+	flex-wrap: wrap;
+	margin-top:20px;
+	text-align:center;
+}
+
+#footer-text{
+	width:100%;
+	text-align:center;
+}
