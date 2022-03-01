@@ -30,7 +30,7 @@ app = Flask(__name__)
 app.secret_key = 'file_upload_key'
 
 MYDIR = os.path.dirname(__file__)
-UPLOAD_FOLDER = "static/Report/"
+app.config['UPLOAD_FOLDER'] = "static/Report/"
 equipmet_list = ['Dispensing Booth',
 'Dispensing Scoop ( Small)','Dispensing Scoop (Large)',
 'Spatula','Spatula' ,'Manufacturing Scoop',
