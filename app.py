@@ -160,7 +160,7 @@ def submit_data():
         send_mail(subject,text,final_working_directory,file_name) 
     d = {"error":"none",
          "file_name":file_name,
-         "file_path":final_working_directory}
+         "file_path":app.config['UPLOAD_FOLDER']+file_name}
    
     return json.dumps(d)
 
