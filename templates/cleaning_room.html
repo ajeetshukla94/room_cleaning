@@ -30,11 +30,21 @@
           <th></th>
           <th>Select Equipment</th>
           <th>
-			<input type="text" class="form-control pull-left" value="Product Name" /> 
+			 <select class="form-control" name="equipment" id="equipment" style="width:100%">
+			  <option value="" selected>Select an option</option>
+			  {% for product in product_list %}
+			  <option value="{{product}}">{{product}}</option>
+			  {% endfor %}					
+		    </select>
 			<span class="pull-left remove remove-col">x</span>
           </th>
           <th>
-            <input type="text" class="form-control pull-left" value="Product Name" /> 
+            <select class="form-control" name="equipment" id="equipment" style="width:100%">
+			  <option value="" selected>Select an option</option>
+			  {% for product in product_list %}
+			  <option value="{{product}}">{{product}}</option>
+			  {% endfor %}					
+		    </select>
 			<span class="pull-left remove remove-col">x</span>
           </th>
         </tr>

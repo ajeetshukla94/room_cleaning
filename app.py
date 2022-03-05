@@ -38,9 +38,8 @@ equipmet_list = ['Dispensing Booth',
 'Vibro Sifter II','sampling rod','sampling rod' 
 ]
 
-
-
-
+MYDIR = os.path.dirname(__file__)
+app.config['UPLOAD_FOLDER'] = "static/inputData/"
 
 sent_mail = False
 server    = 'smtp.gmail.com'
@@ -102,8 +101,31 @@ def logout():
     return make_response(render_template("login_page/login.html",msg = True, err = False, warn = False, message='Logout Successful'),200)
 
 @app.route("/cleaning_room")
-def cleaning_room():
-    return make_response(render_template('cleaning_room.html',equipmet_list  = equipmet_list),200) 
+def cleaning_room():    
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER'],"product_Details.xlsx"))
+    product_list   = product_frame.Product_Name.unique().tolist()
+    return make_response(render_template('cleaning_room.html',equipmet_list  = equipmet_list,product_list  = product_list),200) 
+    
+    
+@app.route("/UpdateProductList")
+def UpdateProductList():
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER'],"product_Details.xlsx"))
+    product_list   = product_frame.to_dict('records')
+    return make_response(render_template('UpdateProductList.html',product_list  = product_list),200) 
+    
+@app.route("/submit_UpdateProductList")    
+def submit_UpdateProductList():   
+    data            = request.args.get('params_data')
+    data            = json.loads(data)  
+    observation     = data['observation']
+    temp_df         = pd.DataFrame.from_dict(observation,orient ='index')
+    temp_df         = temp_df[['Product_Name','Generic_Name','Form', 'API_with_strength' ,'Minimum_Batch_size','MRDD','LD50','NOEL']]
+    print(temp_df)
+    final_working_directory = MYDIR + "static/inputData/product_Details.xlsx"
+    temp_df.to_excel(final_working_directory,index=False)
+    d = {"error":"none",}
+   
+    return json.dumps(d)
 
 @app.route("/submit_data")    
 def submit_data():
@@ -165,6 +187,6 @@ def submit_data():
     return json.dumps(d)
 
 if __name__ == '__main__':
-    #app.debug = True
+    app.debug = True
     app.run()
 
