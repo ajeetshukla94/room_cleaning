@@ -30,7 +30,7 @@ app = Flask(__name__)
 app.secret_key = 'file_upload_key'
 
 MYDIR = os.path.dirname(__file__)
-app.config['UPLOAD_FOLDER'] = "static/Report/"
+app.config['UPLOAD_FOLDER_REPORT'] = "static/Report/"
 equipmet_list = ['Dispensing Booth',
 'Dispensing Scoop ( Small)','Dispensing Scoop (Large)',
 'Spatula','Spatula' ,'Manufacturing Scoop',
@@ -39,7 +39,7 @@ equipmet_list = ['Dispensing Booth',
 ]
 
 MYDIR = os.path.dirname(__file__)
-app.config['UPLOAD_FOLDER'] = "static/inputData/"
+app.config['UPLOAD_FOLDER_INPUTDATA'] = "static/inputData/"
 
 sent_mail = False
 server    = 'smtp.gmail.com'
@@ -102,14 +102,14 @@ def logout():
 
 @app.route("/cleaning_room")
 def cleaning_room():    
-    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER'],"product_Details.xlsx"))
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
     product_list   = product_frame.Product_Name.unique().tolist()
     return make_response(render_template('cleaning_room.html',equipmet_list  = equipmet_list,product_list  = product_list),200) 
     
     
 @app.route("/UpdateProductList")
 def UpdateProductList():
-    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER'],"product_Details.xlsx"))
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
     product_list   = product_frame.to_dict('records')
     return make_response(render_template('UpdateProductList.html',product_list  = product_list),200) 
     
@@ -121,7 +121,8 @@ def submit_UpdateProductList():
     temp_df         = pd.DataFrame.from_dict(observation,orient ='index')
     temp_df         = temp_df[['Product_Name','Generic_Name','Form', 'API_with_strength' ,'Minimum_Batch_size','MRDD','LD50','NOEL']]
     print(temp_df)
-    final_working_directory = MYDIR + "static/inputData/product_Details.xlsx"
+    final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER_INPUTDATA']+"product_Details.xlsx"
+
     temp_df.to_excel(final_working_directory,index=False)
     d = {"error":"none",}
    
@@ -175,14 +176,14 @@ def submit_data():
             ws.cell(row=row, column=j+2, value=row_data[j])
         row=row+1    
         
-    final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER']+file_name
+    final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER_REPORT']+file_name
     wb.save(final_working_directory)
 
     if sent_mail:
         send_mail(subject,text,final_working_directory,file_name) 
     d = {"error":"none",
          "file_name":file_name,
-         "file_path":app.config['UPLOAD_FOLDER']+file_name}
+         "file_path":app.config['UPLOAD_FOLDER_REPORT']+file_name}
    
     return json.dumps(d)
 
