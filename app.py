@@ -176,7 +176,7 @@ def submit_data():
         row=row+1    
         
     final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER']+file_name
-    wb.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
+    wb.save(final_working_directory)
 
     if sent_mail:
         send_mail(subject,text,final_working_directory,file_name) 
