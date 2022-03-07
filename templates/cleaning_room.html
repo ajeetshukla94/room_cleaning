@@ -28,7 +28,7 @@ body.on('click', 'button.add-col', function()
 
  
 $('<th>', {'html': '<div style="display: flex;">\
-            <select class="form-control" name="equipment" id="equipment" style="padding:5px;">\
+            <select class="form-control" style="padding:5px;">\
 			  <option value="" selected>Select an Product</option>\
 			  {% for product in product_list %}\
 			  <option value="{{product}}">{{product}}</option>\
@@ -56,7 +56,7 @@ $('<th>', {'html': '<div style="display: flex;">\
           <th>Select Equipment</th>
           <th>
 			 <div style="display: flex;">		     
-				<select class="form-control" name="equipment" id="equipment"style="padding:5px;" >
+				<select class="form-control" style="padding:5px;" >
 				  <option value="" selected>Select an Product</option>
 				  {% for product in product_list %}
 				  <option value="{{product}}">{{product}}</option>
@@ -67,7 +67,7 @@ $('<th>', {'html': '<div style="display: flex;">\
           </th>
           <th>
 		  <div style="display: flex;">
-            <select class="form-control" name="equipment" id="equipment" style="padding:5px;">
+            <select class="form-control"style="padding:5px;">
 			  <option value="" selected>Select an Product</option>
 			  {% for product in product_list %}
 			  <option value="{{product}}">{{product}}</option>

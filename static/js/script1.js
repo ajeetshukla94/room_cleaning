@@ -57,6 +57,10 @@ for(var i =0; i<code_rows.length; i++)
 			{
 				data[i][j] = "Equipment"
 			}
+			else if (i==0 )
+			{
+				data[i][j] = tds[j].children[2].children[0].firstElementChild.value
+			}
 			else
 			{
 				data[i][j]  = tds[j].firstElementChild.value
