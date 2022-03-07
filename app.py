@@ -243,7 +243,7 @@ def submit_data():
     store_location = "static/inputData/"+file_name
     final_working_directory=MYDIR + "/" +store_location
     #final_working_directory=store_location
-    wb.save(final_working_directory,read_only=True)
+    wb.save(final_working_directory)
     
     ###################################END of prodcut sheet#################################################
 
