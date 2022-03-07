@@ -25,6 +25,7 @@ from fnmatch import fnmatch
 import time
 from openpyxl.styles import PatternFill
 from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 
 app = Flask(__name__)
 app.secret_key = 'file_upload_key'
@@ -144,7 +145,8 @@ def submit_data():
     
     temp_df.dropna(axis=1, how='all',inplace=True)    
     wb = Workbook()
-    ws = wb.active    
+    ws = wb.active 
+    ws.title = 'Equipment List '    
     file_name = "Cleaning_room_report_{}.xlsx".format(str(datetime.datetime.today().strftime('%d_%m_%Y')))    
     end_column =temp_df.shape[1] +2   
     ws.merge_cells(start_row=2, start_column=2, end_row=2, end_column=end_column)
@@ -170,35 +172,78 @@ def submit_data():
     j=1
     for row_data in temp_df.columns:
         ws.cell(row=row, column=j+2, value=row_data)
+        ws.cell(row=row, column=j+2).fill = PatternFill(start_color='66ccff', end_color='66ccff', fill_type="solid")
         j=j+1
     row=row+1
     ws['B6']="SR.no"
+    ws['B6'].fill = PatternFill(start_color='66ccff', end_color='66ccff', fill_type="solid")
     for row_data in temp_df.itertuples():
         for j in range(0,len(row_data) ):   
             ws.cell(row=row, column=j+2, value=row_data[j])
+            if j ==0:
+                ws.cell(row=row, column=j+2).fill = PatternFill(start_color='669999', end_color='669999', fill_type="solid")
+            else :
+                ws.cell(row=row, column=j+2).fill = PatternFill(start_color='3399ff', end_color='3399ff', fill_type="solid")
+                
         row=row+1    
 
     
 
-    store_location = "static/inputData/"+file_name
-    final_working_directory=MYDIR + "/" +store_location
-    #final_working_directory=store_location
-    
+    sheet_ranges = wb.active
+    sheet_ranges.column_dimensions["B"].width = 10
+    sheet_ranges.column_dimensions["C"].width = 35
+    column = 4
+    while column < end_column:
+        i = get_column_letter(column)
+        ws.column_dimensions[i].width = 10
+        column += 1   
     #################################start of prodcut sheet##################################################
-    product_sheet = wb.create_sheet('product_details')
-    row = 6
-    j=1    
+    product_sheet = wb.create_sheet('Product Details')
+    
     product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
+    
+    end_column =product_frame.shape[1] +2   
+    product_sheet.merge_cells(start_row=2, start_column=2, end_row=2, end_column=end_column)
+    product_sheet["B" + str(2)] = 'ANNEXURE - II'
+    product_sheet["B" + str(2)].fill = PatternFill(start_color='00cc99', end_color='00cc99', fill_type="solid")
+    currentCell = product_sheet["B" + str(2)]
+    currentCell.alignment = Alignment(horizontal='center', vertical='center')
+    
+    product_sheet.merge_cells(start_row=3, start_column=2, end_row=4, end_column=end_column)
+    product_sheet["B" + str(3)] = 'Product Details '
+    product_sheet["B" + str(3)].fill = PatternFill(start_color='ff9933', end_color='ff9933', fill_type="solid")
+    currentCell = product_sheet["B" + str(3)]
+    currentCell.alignment = Alignment(horizontal='center', vertical='center')    
+    row = 5
+    j=1        
     for row_data in product_frame.columns:
         product_sheet.cell(row=row, column=j+2, value=row_data)
+        product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='ffcc99', end_color='ffcc99', fill_type="solid")
         j=j+1
     row=row+1
-    ws['B6']="SR.no"
+    product_sheet['B5']="SR.no"
+    product_sheet['B5'].fill = PatternFill(start_color='ffcc99', end_color='ffcc99', fill_type="solid")
     for row_data in product_frame.itertuples():
         for j in range(0,len(row_data) ):   
             product_sheet.cell(row=row, column=j+2, value=row_data[j])
+            if j ==0:
+                product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='669999', end_color='669999', fill_type="solid")
+            else :
+                product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='3399ff', end_color='3399ff', fill_type="solid")
         row=row+1   
-    wb.save(final_working_directory)
+   
+    sheet_ranges = wb['Product Details']
+    sheet_ranges.column_dimensions["C"].width = 20
+    sheet_ranges.column_dimensions["D"].width = 20
+    sheet_ranges.column_dimensions["E"].width = 15
+    sheet_ranges.column_dimensions["F"].width = 20
+    sheet_ranges.column_dimensions["G"].width = 20
+    
+    
+    store_location = "static/inputData/"+file_name
+    final_working_directory=MYDIR + "/" +store_location
+    #final_working_directory=store_location
+    wb.save(final_working_directory,read_only=True)
     
     ###################################END of prodcut sheet#################################################
 
@@ -211,6 +256,6 @@ def submit_data():
     return json.dumps(d)
 
 if __name__ == '__main__':
-    app.debug = True
+    #app.debug = True
     app.run()
 
