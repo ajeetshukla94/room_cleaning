@@ -51,10 +51,7 @@ function submit()
 		params_data : JSON.stringify(full_data)
 	}, function(result) 
 	{
-		alert("done");
-		
-
-		
+		alert("done");		
 	});
 	
 }

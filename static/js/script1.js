@@ -39,20 +39,6 @@ body.on('click', 'span.remove-col', function()
   cell.closest('table').find('th, td').filter(':nth-child(' + index + ')').remove();
 });
 
-body.on('click', 'button.add-col', function() 
-{
-  var table = $(this).closest('div.table-content').find('table'),
-  thead = table.find('thead'),
-  lastTheadRow = thead.find('tr:last-child'),
-  tbody = table.find('tbody');
-
- 
-$('<th>', {
-    'html': '<input type="text" class="form-control pull-left" value="Product Name" /> <span class="pull-left remove remove-col">x</span>'
-  }).appendTo(lastTheadRow);
-  $('<td>', {'html': '<input type="text" class="form-control pull-left" value="Product Name"/>'
-  }).insertAfter('td:last-child');
-});
 
 function submit(){
 

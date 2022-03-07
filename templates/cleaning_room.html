@@ -17,6 +17,31 @@
 
 <body>
 
+<script>
+var body = $('body');
+body.on('click', 'button.add-col', function() 
+{
+  var table = $(this).closest('div.table-content').find('table'),
+  thead = table.find('thead'),
+  lastTheadRow = thead.find('tr:last-child'),
+  tbody = table.find('tbody');
+
+ 
+$('<th>', {'html': '<div style="display: flex;">\
+            <select class="form-control" name="equipment" id="equipment" style="padding:5px;">\
+			  <option value="" selected>Select an Product</option>\
+			  {% for product in product_list %}\
+			  <option value="{{product}}">{{product}}</option>\
+			  {% endfor %}					\
+		    </select>	\
+			<span class="pull-left remove remove-col" style="padding:8px;">x</span>\
+		  </div>'
+  }).appendTo(lastTheadRow);
+  $('<td>', {'html': '<input type="text"  value=""/>'
+  }).insertAfter('td:last-child');
+});
+</script>
+
 <my-header></my-header>
 
 
@@ -30,22 +55,26 @@
           <th></th>
           <th>Select Equipment</th>
           <th>
-			 <select class="form-control" name="equipment" id="equipment" style="width:100%">
-			  <option value="" selected>Select an option</option>
-			  {% for product in product_list %}
-			  <option value="{{product}}">{{product}}</option>
-			  {% endfor %}					
-		    </select>
-			<span class="pull-left remove remove-col">x</span>
+			 <div style="display: flex;">		     
+				<select class="form-control" name="equipment" id="equipment"style="padding:5px;" >
+				  <option value="" selected>Select an Product</option>
+				  {% for product in product_list %}
+				  <option value="{{product}}">{{product}}</option>
+				  {% endfor %}					
+				</select>
+				<span class="pull-left remove remove-col" style="padding:8px;">x</span>
+			</div>
           </th>
           <th>
-            <select class="form-control" name="equipment" id="equipment" style="width:100%">
-			  <option value="" selected>Select an option</option>
+		  <div style="display: flex;">
+            <select class="form-control" name="equipment" id="equipment" style="padding:5px;">
+			  <option value="" selected>Select an Product</option>
 			  {% for product in product_list %}
 			  <option value="{{product}}">{{product}}</option>
 			  {% endfor %}					
-		    </select>
-			<span class="pull-left remove remove-col">x</span>
+		    </select>	
+			<span class="pull-left remove remove-col" style="padding:8px;">x</span>
+		  </div>
           </th>
         </tr>
       </thead>
@@ -56,7 +85,7 @@
           </td>
           <td>
 			  <select class="form-control" name="equipment" id="equipment" style="width:100%">
-			  <option value="" selected>Select an option</option>
+			  <option value="" selected>Select an Equipment</option>
 			  {% for equipment in equipmet_list %}
 			  <option value="{{equipment}}">{{equipment}}</option>
 			  {% endfor %}					

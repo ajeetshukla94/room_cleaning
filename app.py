@@ -74,6 +74,8 @@ def default():
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
+    product_list   = product_frame.Product_Name.unique().tolist()
     if request.method == 'POST':
       form_data = request.form
       l_id = form_data['login']
@@ -82,7 +84,7 @@ def login():
           print('inside if')
           session['username'] = l_id
           flash('Login Successful')
-          return make_response(render_template('cleaning_room.html',equipmet_list  = equipmet_list,
+          return make_response(render_template('cleaning_room.html',equipmet_list  = equipmet_list,product_list  = product_list,
                                 msg = True, err = False, warn = False),200)
       else:
           print('inside else')
@@ -120,9 +122,9 @@ def submit_UpdateProductList():
     observation     = data['observation']
     temp_df         = pd.DataFrame.from_dict(observation,orient ='index')
     temp_df         = temp_df[['Product_Name','Generic_Name','Form', 'API_with_strength' ,'Minimum_Batch_size','MRDD','LD50','NOEL']]
-    print(temp_df)
-    final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER_INPUTDATA']+"product_Details.xlsx"
-
+      
+    store_location = "static/inputData/"+"product_Details.xlsx"
+    final_working_directory=MYDIR + "/" +store_location
     temp_df.to_excel(final_working_directory,index=False)
     d = {"error":"none",}
    
@@ -175,19 +177,40 @@ def submit_data():
         for j in range(0,len(row_data) ):   
             ws.cell(row=row, column=j+2, value=row_data[j])
         row=row+1    
-        
-    final_working_directory =MYDIR + "/" + app.config['UPLOAD_FOLDER_REPORT']+file_name
+
+    
+
+    store_location = "static/inputData/"+file_name
+    final_working_directory=MYDIR + "/" +store_location
+    #final_working_directory=store_location
+    
+    #################################start of prodcut sheet##################################################
+    product_sheet = wb.create_sheet('product_details')
+    row = 6
+    j=1    
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
+    for row_data in product_frame.columns:
+        product_sheet.cell(row=row, column=j+2, value=row_data)
+        j=j+1
+    row=row+1
+    ws['B6']="SR.no"
+    for row_data in product_frame.itertuples():
+        for j in range(0,len(row_data) ):   
+            product_sheet.cell(row=row, column=j+2, value=row_data[j])
+        row=row+1   
     wb.save(final_working_directory)
+    
+    ###################################END of prodcut sheet#################################################
 
     if sent_mail:
         send_mail(subject,text,final_working_directory,file_name) 
     d = {"error":"none",
          "file_name":file_name,
-         "file_path":app.config['UPLOAD_FOLDER_REPORT']+file_name}
+         "file_path":store_location}
    
     return json.dumps(d)
 
 if __name__ == '__main__':
-    #app.debug = True
+    app.debug = True
     app.run()
 
