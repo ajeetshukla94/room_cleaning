@@ -34,12 +34,15 @@ function submit()
 		table_data['Product_Name'] =tds[0].firstElementChild.value 	
 		table_data['Generic_Name'] =tds[1].firstElementChild.value 	
 		table_data['Form'] =tds[2].firstElementChild.value 	
-		table_data['API_with_strength'] =tds[3].firstElementChild.value 	
-		table_data['Minimum_Batch_size'] =tds[4].firstElementChild.value 	
-		table_data['MRDD'] =tds[5].firstElementChild.value 	
-		table_data['LD50'] =tds[6].firstElementChild.value
-		table_data['NOEL'] =tds[7].firstElementChild.value		
-		
+		table_data['API_with_strength'] =tds[3].firstElementChild.value 			
+		table_data['Minimum_Batch_size_NOS'] =tds[4].firstElementChild.value 
+		table_data['Minimum_Batch_size_MG'] =tds[5].firstElementChild.value 
+		table_data['MRDD'] =tds[6].firstElementChild.value 
+		table_data['LRDD_MG'] =tds[7].firstElementChild.value 
+		table_data['LRDD_NOS'] =tds[8].firstElementChild.value 		
+		table_data['PDE_VALUE'] =tds[9].firstElementChild.value 	
+		table_data['LD50'] =tds[10].firstElementChild.value
+		table_data['NOEL'] =tds[11].firstElementChild.value				
 		final_table_data[j] = table_data
 	}
 	

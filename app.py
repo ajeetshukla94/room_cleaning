@@ -26,6 +26,7 @@ import time
 from openpyxl.styles import PatternFill
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
+from sheet_generation import Sheet_Generation
 
 app = Flask(__name__)
 app.secret_key = 'file_upload_key'
@@ -122,8 +123,9 @@ def submit_UpdateProductList():
     data            = json.loads(data)  
     observation     = data['observation']
     temp_df         = pd.DataFrame.from_dict(observation,orient ='index')
-    temp_df         = temp_df[['Product_Name','Generic_Name','Form', 'API_with_strength' ,'Minimum_Batch_size','MRDD','LD50','NOEL']]
-      
+    temp_df         = temp_df[['Product_Name','Generic_Name','Form', 'API_with_strength' ,'Minimum_Batch_size_NOS',
+                       'Minimum_Batch_size_MG','MRDD','LRDD_MG','LRDD_NOS','PDE_VALUE','LRD50','NOEL']]
+
     store_location = "static/inputData/"+"product_Details.xlsx"
     final_working_directory=MYDIR + "/" +store_location
     temp_df.to_excel(final_working_directory,index=False)
@@ -135,117 +137,30 @@ def submit_UpdateProductList():
 def submit_data():
    
     data            = request.args.get('params_data')
-    data            = json.loads(data)
-     
-   
+    data            = json.loads(data)   
     temp_df         = pd.DataFrame(data)
-    new_header      = temp_df.iloc[0] 
-    temp_df         = temp_df[1:] 
-    temp_df.columns = new_header
     
-    temp_df.dropna(axis=1, how='all',inplace=True)    
-    wb = Workbook()
-    ws = wb.active 
-    ws.title = 'Equipment List '    
+
+    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))   
     file_name = "Cleaning_room_report_{}.xlsx".format(str(datetime.datetime.today().strftime('%d_%m_%Y')))    
-    end_column =temp_df.shape[1] +2   
-    ws.merge_cells(start_row=2, start_column=2, end_row=2, end_column=end_column)
-    ws["B" + str(2)] = 'ANNEXURE - I'
-    ws["B" + str(2)].fill = PatternFill(start_color='00cc99', end_color='00cc99', fill_type="solid")
-    currentCell = ws["B" + str(2)]
-    currentCell.alignment = Alignment(horizontal='center', vertical='center')
-    
-    ws.merge_cells(start_row=3, start_column=2, end_row=4, end_column=end_column)
-    ws["B" + str(3)] = 'Equipment List '
-    ws["B" + str(3)].fill = PatternFill(start_color='ff9933', end_color='ff9933', fill_type="solid")
-    currentCell = ws["B" + str(3)]
-    currentCell.alignment = Alignment(horizontal='center', vertical='center')
-    
-    
-    ws.merge_cells(start_row=5, start_column=2, end_row=5, end_column=end_column)
-    ws["B" + str(5)] = 'List of Equipments and their Product Contact Surface Area  '
-    ws["B" + str(5)].fill = PatternFill(start_color='ff99ff', end_color='ff99ff', fill_type="solid")
-    currentCell = ws["B" + str(5)]
-    currentCell.alignment = Alignment(horizontal='center', vertical='center')
-    
-    row = 6
-    j=1
-    for row_data in temp_df.columns:
-        ws.cell(row=row, column=j+2, value=row_data)
-        ws.cell(row=row, column=j+2).fill = PatternFill(start_color='66ccff', end_color='66ccff', fill_type="solid")
-        j=j+1
-    row=row+1
-    ws['B6']="SR.no"
-    ws['B6'].fill = PatternFill(start_color='66ccff', end_color='66ccff', fill_type="solid")
-    for row_data in temp_df.itertuples():
-        for j in range(0,len(row_data) ):   
-            ws.cell(row=row, column=j+2, value=row_data[j])
-            if j ==0:
-                ws.cell(row=row, column=j+2).fill = PatternFill(start_color='669999', end_color='669999', fill_type="solid")
-            else :
-                ws.cell(row=row, column=j+2).fill = PatternFill(start_color='3399ff', end_color='3399ff', fill_type="solid")
-                
-        row=row+1    
-
-    
-
-    sheet_ranges = wb.active
-    sheet_ranges.column_dimensions["B"].width = 10
-    sheet_ranges.column_dimensions["C"].width = 35
-    column = 4
-    while column < end_column:
-        i = get_column_letter(column)
-        ws.column_dimensions[i].width = 10
-        column += 1   
-    #################################start of prodcut sheet##################################################
-    product_sheet = wb.create_sheet('Product Details')
-    
-    product_frame  = pd.read_excel(os.path.join(app.config['UPLOAD_FOLDER_INPUTDATA'],"product_Details.xlsx"))
-    
-    end_column =product_frame.shape[1] +2   
-    product_sheet.merge_cells(start_row=2, start_column=2, end_row=2, end_column=end_column)
-    product_sheet["B" + str(2)] = 'ANNEXURE - II'
-    product_sheet["B" + str(2)].fill = PatternFill(start_color='00cc99', end_color='00cc99', fill_type="solid")
-    currentCell = product_sheet["B" + str(2)]
-    currentCell.alignment = Alignment(horizontal='center', vertical='center')
-    
-    product_sheet.merge_cells(start_row=3, start_column=2, end_row=4, end_column=end_column)
-    product_sheet["B" + str(3)] = 'Product Details '
-    product_sheet["B" + str(3)].fill = PatternFill(start_color='ff9933', end_color='ff9933', fill_type="solid")
-    currentCell = product_sheet["B" + str(3)]
-    currentCell.alignment = Alignment(horizontal='center', vertical='center')    
-    row = 5
-    j=1        
-    for row_data in product_frame.columns:
-        product_sheet.cell(row=row, column=j+2, value=row_data)
-        product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='ffcc99', end_color='ffcc99', fill_type="solid")
-        j=j+1
-    row=row+1
-    product_sheet['B5']="SR.no"
-    product_sheet['B5'].fill = PatternFill(start_color='ffcc99', end_color='ffcc99', fill_type="solid")
-    for row_data in product_frame.itertuples():
-        for j in range(0,len(row_data) ):   
-            product_sheet.cell(row=row, column=j+2, value=row_data[j])
-            if j ==0:
-                product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='669999', end_color='669999', fill_type="solid")
-            else :
-                product_sheet.cell(row=row, column=j+2).fill = PatternFill(start_color='3399ff', end_color='3399ff', fill_type="solid")
-        row=row+1   
-   
-    sheet_ranges = wb['Product Details']
-    sheet_ranges.column_dimensions["C"].width = 20
-    sheet_ranges.column_dimensions["D"].width = 20
-    sheet_ranges.column_dimensions["E"].width = 15
-    sheet_ranges.column_dimensions["F"].width = 20
-    sheet_ranges.column_dimensions["G"].width = 20
-    
-    
     store_location = "static/inputData/"+file_name
     final_working_directory=MYDIR + "/" +store_location
     #final_working_directory=store_location
+    
+    
+   
+        
+    wb = Workbook()
+    ws = wb.active 
+    wb = Sheet_Generation.create_equipment_sheet(wb,ws,temp_df)
+    wb = Sheet_Generation.create_product_sheet(wb,ws,product_frame)
+    wb = Sheet_Generation.create_pde_sheet(wb,ws,product_frame)
+    wb = Sheet_Generation.create_toxicity_sheet(wb,ws,product_frame)
+    wb = Sheet_Generation.create_dose_base_sheet(wb,ws,product_frame)
     wb.save(final_working_directory)
     
-    ###################################END of prodcut sheet#################################################
+    
+    
 
     if sent_mail:
         send_mail(subject,text,final_working_directory,file_name) 
